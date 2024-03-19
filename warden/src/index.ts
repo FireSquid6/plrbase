@@ -8,6 +8,7 @@ import { getUserByEmail } from "./crud";
 const app = new Elysia();
 app.use(cors());
 
+// TODO: combine user and profile into one table
 app.post(
   "/user",
   async (ctx) => {
@@ -63,6 +64,19 @@ app.post(
     body: t.Object({
       email: t.String(),
       password: t.String(),
+    }),
+  },
+);
+
+app.delete(
+  "/session",
+  async (ctx) => {
+    // TODO
+    // should delete all of the user's sessions
+  },
+  {
+    body: t.Object({
+      token: t.String(),
     }),
   },
 );
