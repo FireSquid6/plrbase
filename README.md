@@ -1,9 +1,18 @@
 # plrbase
-A self-hosted solution to skill based matchmking, multiplayer lobbies, and user authentication for your game.
 
-plrbase is built specifically for Godot, but more engines are on the way!
-
+Plrbase is a self-hosted solution to skill-based matchmaking, authentication, and server/lobby scaling for your game. It is currently in very early development.
 
 # Services
-- Warden - the core database and API for all of your players
-- Lobby - a scalable service that is automatically deployed to support as many lobbies as you need and connects your players to lobbies
+
+The online self-hosted services are:
+
+- Admin Panel - an admin panel to manage these various services
+- Warden - the database and API for player authentication, matches, and rating calculation
+- Lobby - a regional matchmaking lobby server that can be manually scaled
+- [Galactus](https://www.youtube.com/watch?v=y8OnoxKotPQ) - a service that automatically scales your match servers based on demand
+
+Additionally, plugins for various game engines will be developed.
+
+# Roadmap
+
+- v1 - warden is working properly and a godot plugin works
