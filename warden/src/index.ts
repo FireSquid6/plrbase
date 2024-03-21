@@ -4,83 +4,94 @@ import { createUser } from "./auth";
 import { createSession } from "./crud";
 import { Argon2id } from "oslo/password";
 import { getUserByEmail } from "./crud";
+import type { Lucia } from "lucia";
+import type { BunSQLiteDatabase } from "drizzle-orm/bun-sqlite";
 
-const app = new Elysia();
-app.use(cors());
+export interface ApiContext {
+  db: BunSQLiteDatabase;
+  auth: Lucia;
+}
 
 // TODO: combine user and profile into one table
-app.post(
-  "/user",
-  async (ctx) => {
-    const { email, password } = ctx.body;
 
-    const [id, error] = await createUser(email, password);
+export function App(apiContext: ApiContext) {
+  const app = new Elysia();
+  app.use(cors());
+  app.post(
+    "/user",
+    async (ctx) => {
+      const { email, password } = ctx.body;
 
-    if (error) {
-      ctx.set.status = 400;
-      return error;
-    }
+      const [id, error] = await createUser(apiContext, email, password);
 
-    const session = await createSession(id);
+      if (error) {
+        ctx.set.status = 400;
+        return error;
+      }
 
-    ctx.set.status = 201;
-    return {
-      user: id,
-      session: session.id,
-    };
-  },
-  {
-    body: t.Object({
-      email: t.String(),
-      password: t.String(),
-    }),
-  },
-);
+      const session = await createSession(apiContext, id);
 
-app.post(
-  "/session",
-  async (ctx) => {
-    const { email, password } = ctx.body;
+      ctx.set.status = 201;
+      return {
+        user: id,
+        session: session.id,
+      };
+    },
+    {
+      body: t.Object({
+        email: t.String(),
+        password: t.String(),
+      }),
+    },
+  );
 
-    const user = await getUserByEmail(email);
+  app.post(
+    "/session",
+    async (ctx) => {
+      const { email, password } = ctx.body;
 
-    // is done to protect against timing attacks
-    const userPassword = user.hashedPassword ?? "blahblahblah";
+      const user = await getUserByEmail(apiContext, email);
 
-    const validPassword = await new Argon2id().verify(userPassword, password);
+      // is done to protect against timing attacks
+      const userPassword = user.hashedPassword ?? "blahblahblah";
 
-    if (!validPassword) {
-      ctx.set.status = 400;
-      return "invalid email or password";
-    }
+      const validPassword = await new Argon2id().verify(userPassword, password);
 
-    const sesion = await createSession(user.id);
+      if (!validPassword) {
+        ctx.set.status = 400;
+        return "invalid email or password";
+      }
 
-    return {
-      session: sesion.id,
-    };
-  },
-  {
-    body: t.Object({
-      email: t.String(),
-      password: t.String(),
-    }),
-  },
-);
+      const sesion = await createSession(apiContext, user.id);
 
-app.delete(
-  "/session",
-  async (ctx) => {
-    // TODO
-    // should delete all of the user's sessions
-  },
-  {
-    body: t.Object({
-      token: t.String(),
-    }),
-  },
-);
+      return {
+        session: sesion.id,
+      };
+    },
+    {
+      body: t.Object({
+        email: t.String(),
+        password: t.String(),
+      }),
+    },
+  );
 
-app.listen(3000, () => {
-  console.log("🔭 Warden is online and running on port 3000");
-});
+  app.delete(
+    "/session",
+    async (ctx) => {
+      // TODO
+      // should delete all of the user's sessions
+    },
+    {
+      body: t.Object({
+        token: t.String(),
+      }),
+    },
+  );
+
+  app.listen(3000, () => {
+    console.log("🔭 Warden is online and running on port 3000");
+  });
+
+  return app;
+}
