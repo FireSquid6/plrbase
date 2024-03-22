@@ -4,6 +4,7 @@
 import { getAuth } from "@/auth";
 import { getDb } from "@/db";
 import { startApp, type ApiContext } from "@/index";
+import { seed } from "@/seed";
 import fs from "fs";
 
 fs.rmSync("dev.db");
@@ -15,4 +16,5 @@ const context: ApiContext = {
   mode: "testing",
 };
 
+seed(context);
 startApp(context);

@@ -4,6 +4,8 @@ export const userTable = sqliteTable("user", {
   id: text("id").primaryKey().notNull(),
   email: text("email").notNull(),
   hashedPassword: text("hashedPassword").notNull(),
+  username: text("username").notNull(),
+  rating: integer("rating").notNull(),
 });
 
 export type InsertUser = typeof userTable.$inferInsert;
@@ -23,8 +25,6 @@ export type SelectAdmin = typeof adminTable.$inferSelect;
 export const profileTable = sqliteTable("profile", {
   id: text("id").notNull().primaryKey(),
   userId: text("userId").notNull(),
-  username: text("username").notNull(),
-  rating: integer("rating").notNull(),
 });
 
 export type InsertProfile = typeof profileTable.$inferInsert;

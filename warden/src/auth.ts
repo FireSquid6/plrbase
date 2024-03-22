@@ -34,11 +34,24 @@ declare module "lucia" {
   }
 }
 
+export interface UserProfile {
+  username: string;
+  rating: number;
+}
+
 export async function createUser(
   apiContext: ApiContext,
   email: string,
   password: string,
+  profile?: UserProfile | undefined,
 ): Promise<[string, string]> {
+  if (profile === undefined) {
+    profile = {
+      username: "somerandomusername",
+      rating: 0,
+    };
+  }
+
   if (!isValidEmail(email)) {
     return ["", "invalid email"];
   }
@@ -53,6 +66,8 @@ export async function createUser(
     id: userId,
     email,
     hashedPassword,
+    username: profile.username,
+    rating: profile.rating,
   });
 
   try {
