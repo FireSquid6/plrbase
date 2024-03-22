@@ -1,2 +1,2 @@
-import db from "@/db";
-import { userTable } from "@/schema";
+import { getDb } from "@/db";
+import { getAuth } from "@/auth";

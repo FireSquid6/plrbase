@@ -3,7 +3,7 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run src/index.ts",
+    "dev": "bun run scripts/dev.ts",
     "migrate": "bunx drizzle-kit generate:sqlite",
     "seed": "bun run scripts/seed.ts",
     "studio": "bunx drizzle-kit studio"
