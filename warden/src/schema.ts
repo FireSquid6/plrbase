@@ -22,14 +22,6 @@ export const adminTable = sqliteTable("admin", {
 export type InsertAdmin = typeof adminTable.$inferInsert;
 export type SelectAdmin = typeof adminTable.$inferSelect;
 
-export const profileTable = sqliteTable("profile", {
-  id: text("id").notNull().primaryKey(),
-  userId: text("userId").notNull(),
-});
-
-export type InsertProfile = typeof profileTable.$inferInsert;
-export type SelectProfile = typeof profileTable.$inferSelect;
-
 export const matchesTable = sqliteTable("matches", {
   id: text("id").notNull().primaryKey(),
   userIds: text("userIds").notNull(),
