@@ -6,7 +6,9 @@
     "dev": "bun run scripts/dev.ts",
     "migrate": "bunx drizzle-kit generate:sqlite",
     "seed": "bun run scripts/seed.ts",
-    "studio": "bunx drizzle-kit studio"
+    "studio": "bunx drizzle-kit studio",
+    "reset": "bun run scripts/reset.ts",
+    "resume": "bun run scripts/resume.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
