@@ -1,18 +1,13 @@
-// starts the backend
-// deletes the database on startup and re-seeds it
-// do not run this on the production server
+// resumes the warden server wherever it was left off
 import { getAuth } from "@/auth";
 import { getDb } from "@/db";
 import { startApp, type ApiContext } from "@/index";
-import fs from "fs";
-
-fs.rmSync("dev.db");
 
 const db = getDb();
 const context: ApiContext = {
   db,
   auth: getAuth(db),
-  mode: "testing",
+  mode: "production",
 };
 
 startApp(context);

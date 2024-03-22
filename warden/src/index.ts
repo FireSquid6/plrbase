@@ -10,11 +10,12 @@ import type { BunSQLiteDatabase } from "drizzle-orm/bun-sqlite";
 export interface ApiContext {
   db: BunSQLiteDatabase;
   auth: Lucia;
+  mode: "testing" | "production"; //testing mode is the same as development mode
 }
 
 // TODO: combine user and profile into one table
 
-export function App(apiContext: ApiContext) {
+export function startApp(apiContext: ApiContext) {
   const app = new Elysia();
   app.use(cors());
   app.post(
