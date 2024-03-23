@@ -5,7 +5,10 @@ import { getDb } from "@/db";
 import { startApp, type ApiContext } from "@/index";
 import fs from "fs";
 
-fs.rmSync("warden.db");
+if (fs.existsSync("warden.db")) {
+  fs.rmSync("warden.db");
+}
+
 const db = getDb();
 const context: ApiContext = {
   db,
