@@ -5,13 +5,8 @@ import { getAuth } from "@/auth";
 import { getDb } from "@/db";
 import { startApp, type ApiContext } from "@/index";
 import { seed } from "@/seed";
-import fs from "fs";
 
-if (fs.existsSync("warden.db")) {
-  fs.rmSync("warden.db");
-}
-
-const db = getDb();
+const db = getDb(":memory:");
 const context: ApiContext = {
   db,
   auth: getAuth(db),
